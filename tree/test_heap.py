@@ -44,7 +44,21 @@ class TestHEAP(unittest.TestCase):
         """
         Delete in Max Heap
         """
-        pass
+        heap = Heap(Type.Min)
+        heap.insert(12)
+        heap.insert(10)
+        heap.insert(7)
+        heap.insert(14)
+        heap.insert(1)
+        heap.insert(9)
+
+        self.assertIsInstance(heap, Heap)
+        self.assertEqual(heap.root_node(), 1)
+        self.assertEqual(heap.last_node(), 10)
+
+        heap.delete()
+        self.assertEqual(heap.root_node(), 7)
+        self.assertEqual(heap.last_node(), 12)
 
 
 if __name__ == "__main__":
