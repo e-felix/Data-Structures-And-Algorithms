@@ -64,8 +64,10 @@ class Heap:
 
         # "Throttle up" to place the value at the correct index
         index = len(self.data) - 1
-        while index > 0 and self.__compare(
-            self.data[index], self.data[self.parent_index(index)]
+        while (
+            index > 0
+            and index < self.size()
+            and self.__compare(self.data[index], self.data[self.parent_index(index)])
         ):
             self.data[index], self.data[self.parent_index(index)] = (
                 self.data[self.parent_index(index)],
@@ -80,6 +82,9 @@ class Heap:
         by set the last_node as the new root node
         Then move down the new root node to the correct place
         """
+        if self.size() <= 0:
+            return None
+
         self.data[0] = self.data.pop()
 
         # "Trickle node"
@@ -99,6 +104,12 @@ class Heap:
         i.e for Max HEAP, child is greater
         i.e for Min HEAP, child is lower
         """
+        if (
+            self.left_child_index(trickle_index) > self.size()
+            or self.right_child_index(trickle_index) > self.size()
+        ):
+            return False
+
         return self.__compare(
             self.data[self.left_child_index(trickle_index)], self.data[trickle_index]
         ) or self.__compare(
