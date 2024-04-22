@@ -90,7 +90,7 @@ class Heap:
         # "Trickle node"
         trickle_index = 0
 
-        if self.__has_better_child(trickle_index):
+        while self.__has_better_child(trickle_index):
             child_index = self.__get_better_child(trickle_index)
 
             self.data[trickle_index], self.data[child_index] = (
@@ -98,26 +98,36 @@ class Heap:
                 self.data[trickle_index],
             )
 
+            trickle_index = child_index
+
     def __has_better_child(self, trickle_index):
         """
         Verify if a child should be placed before the node
         i.e for Max HEAP, child is greater
         i.e for Min HEAP, child is lower
         """
-        if (
-            self.left_child_index(trickle_index) > self.size()
-            or self.right_child_index(trickle_index) > self.size()
-        ):
-            return False
+        left = False
+        right = False
 
-        return self.__compare(
-            self.data[self.left_child_index(trickle_index)], self.data[trickle_index]
-        ) or self.__compare(
-            self.data[self.right_child_index(trickle_index)], self.data[trickle_index]
-        )
+        if self.left_child_index(trickle_index) < self.size():
+            left = self.__compare(
+                self.data[self.left_child_index(trickle_index)],
+                self.data[trickle_index],
+            )
+
+        if self.right_child_index(trickle_index) < self.size():
+            right = self.__compare(
+                self.data[self.right_child_index(trickle_index)],
+                self.data[trickle_index],
+            )
+
+        return left or right
 
     def __get_better_child(self, trickle_index):
-        if not self.data[self.right_child_index(trickle_index)]:
+        if (
+            self.right_child_index(trickle_index) < self.size()
+            and not self.data[self.right_child_index(trickle_index)]
+        ):
             return self.left_child_index(trickle_index)
 
         if self.__compare(
