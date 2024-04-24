@@ -28,3 +28,23 @@ class Trie:
             currentNode = currentNode.children[char]
 
         currentNode.children["*"] = None
+
+    def collectAllWords(self, node=None, word="", words=[]):
+        currentNode = node or self.root
+
+        for key, childNode in currentNode.children.items():
+            if key == "*":
+                words.append(word)
+                continue
+
+            self.collectAllWords(childNode, word + key, words)
+
+        return words
+
+    def autocomplete(self, prefix):
+        node = self.search(prefix)
+
+        if not node:
+            return None
+
+        return self.collectAllWords(node, words=[])
